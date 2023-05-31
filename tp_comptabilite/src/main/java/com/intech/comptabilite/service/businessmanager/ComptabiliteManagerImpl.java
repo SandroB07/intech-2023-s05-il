@@ -1,7 +1,6 @@
 package com.intech.comptabilite.service.businessmanager;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -14,14 +13,12 @@ import jakarta.validation.ValidatorFactory;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.intech.comptabilite.model.CompteComptable;
 import com.intech.comptabilite.model.EcritureComptable;
 import com.intech.comptabilite.model.JournalComptable;
 import com.intech.comptabilite.model.LigneEcritureComptable;
-import com.intech.comptabilite.model.SequenceEcritureComptable;
 import com.intech.comptabilite.service.entityservice.CompteComptableService;
 import com.intech.comptabilite.service.entityservice.EcritureComptableService;
 import com.intech.comptabilite.service.entityservice.JournalComptableService;
@@ -32,16 +29,23 @@ import com.intech.comptabilite.service.exceptions.NotFoundException;
 @Service
 public class ComptabiliteManagerImpl implements ComptabiliteManager {
 
-	@Autowired
-	private EcritureComptableService ecritureComptableService;
-	@Autowired
-	private JournalComptableService journalComptableService;
-	@Autowired
-	private CompteComptableService compteComptableService;
-	@Autowired
-	private SequenceEcritureComptableService sequenceEcritureComptableService;
+	private final EcritureComptableService ecritureComptableService;
+	private final JournalComptableService journalComptableService;
+	private final CompteComptableService compteComptableService;
+	private final SequenceEcritureComptableService sequenceEcritureComptableService;
 
-	/**
+    public ComptabiliteManagerImpl(EcritureComptableService ecritureComptableService,
+                                   JournalComptableService journalComptableService,
+                                   CompteComptableService compteComptableService,
+                                   SequenceEcritureComptableService sequenceEcritureComptableService)
+    {
+        this.ecritureComptableService = ecritureComptableService;
+        this.journalComptableService = journalComptableService;
+        this.compteComptableService = compteComptableService;
+        this.sequenceEcritureComptableService = sequenceEcritureComptableService;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -197,7 +201,6 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
     protected Validator getConstraintValidator() {
         Configuration<?> vConfiguration = Validation.byDefaultProvider().configure();
         ValidatorFactory vFactory = vConfiguration.buildValidatorFactory();
-        Validator vValidator = vFactory.getValidator();
-        return vValidator;
+        return vFactory.getValidator();
     }
 }

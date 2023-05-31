@@ -59,9 +59,11 @@ public class ComptabiliteManagerImplTest {
                                                                                  null, null,
                                                                                  new BigDecimal(1234)));
        
-        Assertions.assertThrows(FunctionalException.class,
+        Assertions.assertThrows(
+                FunctionalException.class,
         		() -> {
-        		manager.checkEcritureComptableUnit(vEcritureComptable);}
+                    manager.checkEcritureComptableUnit(vEcritureComptable);
+                }
         );
     }
 
