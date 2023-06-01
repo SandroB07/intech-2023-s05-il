@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.intech.comptabilite.model.EcritureComptable;
@@ -16,8 +15,12 @@ import com.intech.comptabilite.service.exceptions.NotFoundException;
 @Service
 public class EcritureComptableService {
 
-	@Autowired
-	private EcritureComptableRepository repository;
+	private final EcritureComptableRepository repository;
+
+	public EcritureComptableService(EcritureComptableRepository repository)
+	{
+		this.repository = repository;
+	}
 
 	public EcritureComptable insertEcritureComptable(EcritureComptable ecriture) {
 		return repository.save(ecriture);

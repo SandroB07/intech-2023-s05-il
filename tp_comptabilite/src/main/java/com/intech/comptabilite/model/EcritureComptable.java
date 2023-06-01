@@ -1,27 +1,23 @@
 package com.intech.comptabilite.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "ecriture_comptable")
 public class EcritureComptable {
+
+	private static Integer sequence = 1;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +28,12 @@ public class EcritureComptable {
 	@NotNull
 	private JournalComptable journal;
 
-	@Pattern(regexp = "\\d{1,5}-\\d{4}/\\d{5}")
+	@Pattern(regexp = "[a-zA-Z0-9]{1,5}-\\d{4}/\\d{5}")
 	private String reference;
 
 	@NotNull
-	private Date date;
+	@CreatedDate
+	private LocalDate date;
 
 	@NotNull
 	@Size(min = 1, max = 200)
@@ -49,7 +46,29 @@ public class EcritureComptable {
 	@JoinColumn(name = "ecritureId")
 	@Valid
 	@Size(min = 2)
-	private final List<LigneEcritureComptable> listLigneEcriture = new ArrayList<>();
+	private final List<LigneEcritureComptable> listLigneEcriture;
+
+
+	public EcritureComptable() {
+		this.listLigneEcriture = new ArrayList<>();
+		this.date = LocalDate.now();
+	}
+
+	public EcritureComptable(JournalComptable journal) {
+		this();
+		this.journal = journal;
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(getJournal().getCode())
+				.append("-")
+				.append(getDate().getYear())
+				.append("/")
+				.append("0".repeat(Math.max(0, 5 - sequence.toString().length())))
+				.append(sequence);
+
+		setReference(sb.toString());
+		sequence++;
+	}
 
 	public Integer getId() {
 		return id;
@@ -75,11 +94,11 @@ public class EcritureComptable {
 		reference = pReference;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date pDate) {
+	public void setDate(LocalDate pDate) {
 		date = pDate;
 	}
 

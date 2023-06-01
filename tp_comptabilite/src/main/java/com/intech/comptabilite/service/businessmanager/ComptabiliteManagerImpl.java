@@ -1,9 +1,13 @@
 package com.intech.comptabilite.service.businessmanager;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.intech.comptabilite.model.*;
 import jakarta.validation.Configuration;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -15,10 +19,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.intech.comptabilite.model.CompteComptable;
-import com.intech.comptabilite.model.EcritureComptable;
-import com.intech.comptabilite.model.JournalComptable;
-import com.intech.comptabilite.model.LigneEcritureComptable;
 import com.intech.comptabilite.service.entityservice.CompteComptableService;
 import com.intech.comptabilite.service.entityservice.EcritureComptableService;
 import com.intech.comptabilite.service.entityservice.JournalComptableService;
@@ -73,8 +73,9 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
      * {@inheritDoc}
      */
     // TODO à implémenter et à tester
+    // Tested in Integration Test
     @Override
-    public synchronized void addReference(EcritureComptable pEcritureComptable) {
+    public synchronized EcritureComptable addReference(EcritureComptable pEcritureComptable) {
         // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
@@ -87,6 +88,38 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
                 4.  Enregistrer (insert/update) la valeur de la séquence en persitance
                     (table sequence_ecriture_comptable)
          */
+
+        Integer sequence = null;
+        try {
+            sequence = sequenceEcritureComptableService.getDernierValeurByCodeAndAnnee(
+                    pEcritureComptable.getJournal().getCode(),
+                    pEcritureComptable.getDate().getYear()
+            ) + 1;
+        } catch (NotFoundException e)
+        {
+            sequence = 1;
+        }
+
+        StringBuilder sb = new StringBuilder()
+                .append(pEcritureComptable.getJournal().getCode())
+                .append("-")
+                .append(pEcritureComptable.getDate().getYear())
+                .append("/")
+                .append("0".repeat(Math.max(0, 5 - sequence.toString().length())))
+                .append(sequence);
+
+        pEcritureComptable.setReference(sb.toString());
+
+        SequenceEcritureComptable seq =
+                new SequenceEcritureComptable(
+                        pEcritureComptable.getJournal().getCode(),
+                        pEcritureComptable.getDate().getYear(),
+                        sequence
+                );
+
+        sequenceEcritureComptableService.upsert(seq);
+
+        return pEcritureComptable;
     }
 
     /**
@@ -97,6 +130,7 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
     public void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
         this.checkEcritureComptableUnit(pEcritureComptable);
         this.checkEcritureComptableContext(pEcritureComptable);
+
     }
 
 
@@ -143,6 +177,31 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
 
         // TODO ===== RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
+
+        String reference = pEcritureComptable.getReference();
+        Pattern pattern = Pattern.compile("^([A-Za-z0-9]{1,5})-(\\d{4})/(\\d{5})$");
+        Matcher matcher = pattern.matcher(reference);
+
+        if (matcher.find() && matcher.matches()) {
+            String code = matcher.group(1);
+            String year = matcher.group(2);
+            String sequence = matcher.group(3);
+
+            if (!code.equals(pEcritureComptable.getJournal().getCode())) {
+            	throw new FunctionalException("Le code journal dans la référence ne correspond pas au code journal de l'écriture comptable.");
+            }
+
+            if (Integer.parseInt(year) != pEcritureComptable.getDate().getYear()) {
+            	throw new FunctionalException("L'année dans la référence ne correspond pas à la date de l'écriture comptable.");
+            }
+
+            if (sequence.length() != reference.substring(reference.lastIndexOf("/") + 1).length()) {
+                throw new FunctionalException("La longueur de la séquence dans la référence ne correspond pas à la longueur de la séquence dans l'écriture comptable.");
+            }
+        } else {
+            throw new FunctionalException("Le format de la référence n'est pas valide.");
+        }
+
     }
 
 
@@ -178,6 +237,7 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
      */
     @Override
     public void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
+        pEcritureComptable = this.addReference(pEcritureComptable);
         this.checkEcritureComptable(pEcritureComptable);
         ecritureComptableService.insertEcritureComptable(pEcritureComptable);
     }

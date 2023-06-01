@@ -2,6 +2,7 @@ package com.intech.comptabilite.service.entityservice;
 
 import java.math.BigDecimal;
 
+import com.intech.comptabilite.model.JournalComptable;
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class EcritureComptableServiceTest {
     @Test
     public void isEquilibree() {
         EcritureComptable vEcriture;
-        vEcriture = new EcritureComptable();
+        vEcriture = new EcritureComptable(new JournalComptable("AX", "libelle"));
 
         vEcriture.setLibelle("Equilibrée");
         vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));

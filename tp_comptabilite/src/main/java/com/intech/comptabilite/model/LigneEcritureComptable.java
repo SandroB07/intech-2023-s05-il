@@ -2,12 +2,9 @@ package com.intech.comptabilite.model;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -16,7 +13,10 @@ import com.intech.comptabilite.model.validation.MontantComptable;
 @Entity
 @Table(name = "ligne_ecriture_comptable")
 public class LigneEcritureComptable {
-	
+
+
+    private static final String MESSAGE_DECIMAL = "Le montant doit posseder 2 chiffres maximum après la virgule";
+
 	@EmbeddedId
 	private LigneId ligneId; // Pour gérer une clé composée
 
@@ -29,14 +29,14 @@ public class LigneEcritureComptable {
     @Size(max = 200)
     private String libelle;
 
+    /** The Credit. */
+    @MontantComptable
+    private BigDecimal credit;
     /** The Debit. */
     @MontantComptable
     private BigDecimal debit;
 
-    /** The Credit. */
-    @MontantComptable
-    private BigDecimal credit;
-    
+
     public LigneEcritureComptable() {
     }
 

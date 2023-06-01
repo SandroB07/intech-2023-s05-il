@@ -1,0 +1,12 @@
+server:
+  port: 9001
+
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:comptatest
+  sql:
+    init:
+      data-locations: classpath:data-test.sql

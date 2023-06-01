@@ -31,6 +31,12 @@ public class SequenceEcritureComptable {
 	}
 
 	// ==================== Getters/Setters ====================
+    public String getJournalCode() {
+        return journalCode;
+    }
+    public void setJournalCode(String pJournalCode) {
+        journalCode = pJournalCode;
+    }
     public Integer getAnnee() {
         return annee;
     }
