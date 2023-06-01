@@ -1,16 +1,15 @@
 package com.intech.comptabilite.service.entityservice;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.intech.comptabilite.model.EcritureComptable;
 import com.intech.comptabilite.model.LigneEcritureComptable;
 import com.intech.comptabilite.repositories.EcritureComptableRepository;
 import com.intech.comptabilite.service.exceptions.NotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EcritureComptableService {

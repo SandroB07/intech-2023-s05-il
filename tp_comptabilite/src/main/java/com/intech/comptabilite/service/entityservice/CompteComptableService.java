@@ -1,21 +1,23 @@
 package com.intech.comptabilite.service.entityservice;
 
+import com.intech.comptabilite.model.CompteComptable;
+import com.intech.comptabilite.repositories.CompteComptableRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.intech.comptabilite.model.CompteComptable;
-import com.intech.comptabilite.repositories.CompteComptableRepository;
-
 @Service
 public class CompteComptableService {
 
-	@Autowired
-	private CompteComptableRepository repository;
-	
+	private final CompteComptableRepository repository;
+
+    public CompteComptableService(CompteComptableRepository repository)
+    {
+        this.repository = repository;
+    }
+
     /**
      * Renvoie le {@link CompteComptable} de numéro {@code pNumero} s'il est présent dans la liste
      *

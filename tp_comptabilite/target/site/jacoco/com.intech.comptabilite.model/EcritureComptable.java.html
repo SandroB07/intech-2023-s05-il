@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EcritureComptable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">comptabilite</a> &gt; <a href="index.source.html" class="el_package">com.intech.comptabilite.model</a> &gt; <span class="el_source">EcritureComptable.java</span></div><h1>EcritureComptable.java</h1><pre class="source lang-java linenums">package com.intech.comptabilite.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = &quot;ecriture_comptable&quot;)
+public class EcritureComptable {
+
+<span class="fc" id="L18">	private static Integer sequence = 1;</span>
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = &quot;journalCode&quot;)
+	@NotNull
+	private JournalComptable journal;
+
+	@Pattern(regexp = &quot;[a-zA-Z0-9]{1,5}-\\d{4}/\\d{5}&quot;)
+	private String reference;
+
+	@NotNull
+	@CreatedDate
+	private LocalDate date;
+
+	@NotNull
+	@Size(min = 1, max = 200)
+	private String libelle;
+
+	@OneToMany(
+			cascade = CascadeType.ALL, 
+			orphanRemoval = true, 
+			fetch = FetchType.EAGER)
+	@JoinColumn(name = &quot;ecritureId&quot;)
+	@Valid
+	@Size(min = 2)
+	private final List&lt;LigneEcritureComptable&gt; listLigneEcriture;
+
+
+<span class="fc" id="L50">	public EcritureComptable() {</span>
+<span class="fc" id="L51">		this.listLigneEcriture = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L52">		this.date = LocalDate.now();</span>
+<span class="fc" id="L53">	}</span>
+
+	public EcritureComptable(JournalComptable journal) {
+<span class="fc" id="L56">		this();</span>
+<span class="fc" id="L57">		this.journal = journal;</span>
+
+<span class="fc" id="L59">		StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L60">		sb.append(getJournal().getCode())</span>
+<span class="fc" id="L61">				.append(&quot;-&quot;)</span>
+<span class="fc" id="L62">				.append(getDate().getYear())</span>
+<span class="fc" id="L63">				.append(&quot;/&quot;)</span>
+<span class="fc" id="L64">				.append(&quot;0&quot;.repeat(Math.max(0, 5 - sequence.toString().length())))</span>
+<span class="fc" id="L65">				.append(sequence);</span>
+
+<span class="fc" id="L67">		setReference(sb.toString());</span>
+<span class="fc" id="L68">		sequence++;</span>
+<span class="fc" id="L69">	}</span>
+
+	public Integer getId() {
+<span class="nc" id="L72">		return id;</span>
+	}
+
+	public void setId(Integer pId) {
+<span class="nc" id="L76">		id = pId;</span>
+<span class="nc" id="L77">	}</span>
+
+	public JournalComptable getJournal() {
+<span class="fc" id="L80">		return journal;</span>
+	}
+
+	public void setJournal(JournalComptable pJournal) {
+<span class="fc" id="L84">		journal = pJournal;</span>
+<span class="fc" id="L85">	}</span>
+
+	public String getReference() {
+<span class="fc" id="L88">		return reference;</span>
+	}
+
+	public void setReference(String pReference) {
+<span class="fc" id="L92">		reference = pReference;</span>
+<span class="fc" id="L93">	}</span>
+
+	public LocalDate getDate() {
+<span class="fc" id="L96">		return date;</span>
+	}
+
+	public void setDate(LocalDate pDate) {
+<span class="fc" id="L100">		date = pDate;</span>
+<span class="fc" id="L101">	}</span>
+
+	public String getLibelle() {
+<span class="nc" id="L104">		return libelle;</span>
+	}
+
+	public void setLibelle(String pLibelle) {
+<span class="fc" id="L108">		libelle = pLibelle;</span>
+<span class="fc" id="L109">	}</span>
+
+	public List&lt;LigneEcritureComptable&gt; getListLigneEcriture() {
+<span class="fc" id="L112">		return listLigneEcriture;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

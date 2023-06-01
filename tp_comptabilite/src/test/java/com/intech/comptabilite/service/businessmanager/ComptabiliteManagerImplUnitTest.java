@@ -1,36 +1,30 @@
 package com.intech.comptabilite.service.businessmanager;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intech.comptabilite.model.*;
-import com.intech.comptabilite.service.entityservice.EcritureComptableService;
-import com.intech.comptabilite.service.entityservice.JournalComptableService;
 import com.intech.comptabilite.service.entityservice.SequenceEcritureComptableService;
+import com.intech.comptabilite.service.exceptions.FunctionalException;
 import com.intech.comptabilite.service.exceptions.NotFoundException;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import com.intech.comptabilite.service.exceptions.FunctionalException;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 public class ComptabiliteManagerImplUnitTest
 {
@@ -42,12 +36,16 @@ public class ComptabiliteManagerImplUnitTest
     private ComptabiliteManagerImpl manager;
 
     @Autowired
-    private EcritureComptableService ecritureComptableService;
+    private SequenceEcritureComptableService sequenceEcritureComptableService;
 
-    @Autowired
-    private JournalComptableService journalComptableService;
-
-
+    @BeforeEach
+    void beforeEach() {
+        ReflectionTestUtils.setField(
+                manager,
+                "sequenceEcritureComptableService",
+                sequenceEcritureComptableService
+        );
+    }
 
     @Test
     public void checkEcritureComptableUnit() throws Exception {
@@ -191,7 +189,7 @@ public class ComptabiliteManagerImplUnitTest
     public void testAddReference_ExistingJournal() throws Exception {
 
         //Arrange
-        var result = journalComptableService.getListJournalComptable();
+        var result = manager.getListJournalComptable();
         EcritureComptable vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(result.get(0));
         vEcritureComptable.setDate(LocalDate.now());
@@ -204,13 +202,14 @@ public class ComptabiliteManagerImplUnitTest
                 new BigDecimal(123)));
 
         //Act
-        EcritureComptable compt = manager.addReference(vEcritureComptable);
+        //EcritureComptable compt =
+        manager.addReference(vEcritureComptable);
 
-        System.out.println(compt.getReference());
+       // System.out.println(compt.getReference());
 
         //Assert
         String expected = "AC-2023/00003";
-        assertEquals(expected, compt.getReference());
+        assertEquals(expected, vEcritureComptable.getReference());
 
         System.out.println(result);
     }
@@ -230,16 +229,16 @@ public class ComptabiliteManagerImplUnitTest
                 null, null,
                 new BigDecimal(123)));
 
-        List<EcritureComptable> compts = new ArrayList<>();
+//        List<EcritureComptable> compts = new ArrayList<>();
 
         for (int i = 0; i < 15; i++) {
-            compts.add(manager.addReference(vEcritureComptable));
+            manager.addReference(vEcritureComptable);
         }
 
-        var compt = compts.get(compts.size() - 1);
+        //var compt = compts.get(compts.size() - 1);
 
         String expected = "BY-2015/00015";
-        Assertions.assertEquals(expected, compt.getReference());
+        Assertions.assertEquals(expected, vEcritureComptable.getReference());
 
     }
 
@@ -249,7 +248,11 @@ public class ComptabiliteManagerImplUnitTest
 
         SequenceEcritureComptableService seq =
                 Mockito.mock(SequenceEcritureComptableService.class);
-        ReflectionTestUtils.setField(manager, "sequenceEcritureComptableService", seq);
+        ReflectionTestUtils.setField(
+            manager,
+            "sequenceEcritureComptableService",
+            seq
+        );
 
         EcritureComptable vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setDate(LocalDate.parse("2015-01-01"));
@@ -263,19 +266,32 @@ public class ComptabiliteManagerImplUnitTest
                 null, null,
                 new BigDecimal(123)));
 
+
+
+        //J'ai du creee methode statique createOrGet pour eviter l'erreur de stubbing
+
+
+        SequenceId sequenceId = SequenceId.createOrGet(
+            vEcritureComptable.getJournal().getCode(),
+            vEcritureComptable.getDate().getYear()
+        );
+
         Mockito
             .when(
-                seq.getDernierValeurByCodeAndAnnee(
-                    vEcritureComptable.getJournal().getCode(),
-                    vEcritureComptable.getDate().getYear()
+                seq.getDernierValeurSequenceId(
+                    sequenceId
                 )
             )
             .thenReturn(12);
 
-        var compt = manager.addReference(vEcritureComptable);
-        Mockito.verify(seq).getDernierValeurByCodeAndAnnee(vEcritureComptable.getJournal().getCode(), vEcritureComptable.getDate().getYear());
+
+        //var compt =
+        manager.addReference(vEcritureComptable);
+        Mockito.verify(seq).getDernierValeurSequenceId(
+            sequenceId
+        );
 
         String expected = "BY-2015/00013";
-        Assertions.assertEquals(expected, compt.getReference());
+        Assertions.assertEquals(expected, vEcritureComptable.getReference());
     }
 }

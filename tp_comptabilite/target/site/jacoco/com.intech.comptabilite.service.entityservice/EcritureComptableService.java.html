@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EcritureComptableService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">comptabilite</a> &gt; <a href="index.source.html" class="el_package">com.intech.comptabilite.service.entityservice</a> &gt; <span class="el_source">EcritureComptableService.java</span></div><h1>EcritureComptableService.java</h1><pre class="source lang-java linenums">package com.intech.comptabilite.service.entityservice;
+
+import com.intech.comptabilite.model.EcritureComptable;
+import com.intech.comptabilite.model.LigneEcritureComptable;
+import com.intech.comptabilite.repositories.EcritureComptableRepository;
+import com.intech.comptabilite.service.exceptions.NotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class EcritureComptableService {
+
+	private final EcritureComptableRepository repository;
+
+	public EcritureComptableService(EcritureComptableRepository repository)
+<span class="fc" id="L20">	{</span>
+<span class="fc" id="L21">		this.repository = repository;</span>
+<span class="fc" id="L22">	}</span>
+
+	public EcritureComptable insertEcritureComptable(EcritureComptable ecriture) {
+<span class="nc" id="L25">		return repository.save(ecriture);</span>
+	}
+
+	public EcritureComptable updateEcritureComptable(EcritureComptable ecriture) {
+<span class="nc" id="L29">		return repository.save(ecriture);</span>
+	}
+
+	public void deleteEcritureComptable(Integer ecritureId) {
+<span class="nc" id="L33">		repository.deleteById(ecritureId);</span>
+<span class="nc" id="L34">	}</span>
+
+	public List&lt;EcritureComptable&gt; getListEcritureComptable() {
+<span class="fc" id="L37">		List&lt;EcritureComptable&gt; result = new ArrayList&lt;EcritureComptable&gt;();</span>
+<span class="fc" id="L38">		repository.findAll().forEach(result::add);</span>
+<span class="fc" id="L39">		return result;</span>
+	}
+
+	public EcritureComptable getEcritureComptableByRef(String reference) throws NotFoundException {
+<span class="fc" id="L43">		Optional&lt;EcritureComptable&gt; result = repository.getByReference(reference);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		if (result.isEmpty()) {</span>
+<span class="fc" id="L45">			throw new NotFoundException();</span>
+		} else {
+<span class="fc" id="L47">			return result.get();</span>
+		}
+	}
+
+	/**
+	 * Calcul et renvoie le total des montants au débit des lignes d'écriture
+	 *
+	 * @return {@link BigDecimal}, {@link BigDecimal#ZERO} si aucun montant au débit
+	 */
+	public BigDecimal getTotalDebit(EcritureComptable ecriture) {
+<span class="fc" id="L57">		BigDecimal vRetour = BigDecimal.ZERO;</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">		for (LigneEcritureComptable vLigneEcritureComptable : ecriture.getListLigneEcriture()) {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">			if (vLigneEcritureComptable.getDebit() != null) {</span>
+<span class="fc" id="L60">				vRetour = vRetour.add(vLigneEcritureComptable.getDebit());</span>
+			}
+<span class="fc" id="L62">		}</span>
+<span class="fc" id="L63">		return vRetour;</span>
+	}
+
+	/**
+	 * Calcul et renvoie le total des montants au crédit des lignes d'écriture
+	 *
+	 * @return {@link BigDecimal}, {@link BigDecimal#ZERO} si aucun montant au
+	 *         crédit
+	 */
+	public BigDecimal getTotalCredit(EcritureComptable ecriture) {
+<span class="fc" id="L73">		BigDecimal vRetour = BigDecimal.ZERO;</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">		for (LigneEcritureComptable vLigneEcritureComptable : ecriture.getListLigneEcriture()) {</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">			if (vLigneEcritureComptable.getCredit() != null) {</span>
+<span class="fc" id="L76">				vRetour = vRetour.add(vLigneEcritureComptable.getCredit());</span>
+			}
+<span class="fc" id="L78">		}</span>
+<span class="fc" id="L79">		return vRetour;</span>
+	}
+
+	/**
+	 * Renvoie si l'écriture est équilibrée (TotalDebit = TotalCrédit)
+	 * 
+	 * @return boolean
+	 */
+	public boolean isEquilibree(EcritureComptable ecriture) {
+		/*int equal = this.getTotalDebit(ecriture).compareTo(getTotalCredit(ecriture));
+		return equal == 0;*/
+
+<span class="fc bfc" id="L91" title="All 2 branches covered.">		return this.getTotalCredit(ecriture).subtract(this.getTotalDebit(ecriture)).compareTo(BigDecimal.ZERO) == 0;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

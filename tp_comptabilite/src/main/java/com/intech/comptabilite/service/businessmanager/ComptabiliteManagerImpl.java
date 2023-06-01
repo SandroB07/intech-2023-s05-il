@@ -1,30 +1,22 @@
 package com.intech.comptabilite.service.businessmanager;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.intech.comptabilite.model.*;
-import jakarta.validation.Configuration;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
-
 import com.intech.comptabilite.service.entityservice.CompteComptableService;
 import com.intech.comptabilite.service.entityservice.EcritureComptableService;
 import com.intech.comptabilite.service.entityservice.JournalComptableService;
 import com.intech.comptabilite.service.entityservice.SequenceEcritureComptableService;
 import com.intech.comptabilite.service.exceptions.FunctionalException;
 import com.intech.comptabilite.service.exceptions.NotFoundException;
+import jakarta.validation.*;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ComptabiliteManagerImpl implements ComptabiliteManager {
@@ -75,7 +67,7 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
     // TODO à implémenter et à tester
     // Tested in Integration Test
     @Override
-    public synchronized EcritureComptable addReference(EcritureComptable pEcritureComptable) {
+    public synchronized void addReference(EcritureComptable pEcritureComptable) {
         // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
@@ -91,9 +83,11 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
 
         Integer sequence = null;
         try {
-            sequence = sequenceEcritureComptableService.getDernierValeurByCodeAndAnnee(
+            sequence = sequenceEcritureComptableService.getDernierValeurSequenceId(
+                SequenceId.createOrGet(
                     pEcritureComptable.getJournal().getCode(),
                     pEcritureComptable.getDate().getYear()
+                )
             ) + 1;
         } catch (NotFoundException e)
         {
@@ -119,7 +113,7 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
 
         sequenceEcritureComptableService.upsert(seq);
 
-        return pEcritureComptable;
+       // return pEcritureComptable;
     }
 
     /**
@@ -237,7 +231,8 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
      */
     @Override
     public void insertEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
-        pEcritureComptable = this.addReference(pEcritureComptable);
+        //pEcritureComptable =
+        this.addReference(pEcritureComptable);
         this.checkEcritureComptable(pEcritureComptable);
         ecritureComptableService.insertEcritureComptable(pEcritureComptable);
     }

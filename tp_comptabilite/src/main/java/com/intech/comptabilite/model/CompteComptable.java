@@ -27,7 +27,7 @@ public class CompteComptable {
     }
 
     public CompteComptable(Integer pNumero, String pLibelle) {
-        numero = pNumero;
+        this(pNumero);
         libelle = pLibelle;
     }
 

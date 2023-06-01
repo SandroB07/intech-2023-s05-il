@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SequenceId.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">comptabilite</a> &gt; <a href="index.source.html" class="el_package">com.intech.comptabilite.model</a> &gt; <span class="el_source">SequenceId.java</span></div><h1>SequenceId.java</h1><pre class="source lang-java linenums">package com.intech.comptabilite.model;
+
+import jakarta.persistence.Transient;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SequenceId implements Serializable {
+
+	@Transient
+	private static final long serialVersionUID = -3816603702192890820L;
+
+<span class="fc" id="L14">	private static final List&lt;SequenceId&gt; ID_LIST = new ArrayList&lt;&gt;();</span>
+
+	public static SequenceId createOrGet(String code, Integer annee) {
+
+<span class="fc" id="L18">		SequenceId id = new SequenceId(code, annee);</span>
+
+<span class="fc bfc" id="L20" title="All 2 branches covered.">		for (SequenceId sequenceId : ID_LIST) {</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">			if (sequenceId.equals(id)) {</span>
+<span class="fc" id="L22">				return sequenceId;</span>
+			}
+<span class="fc" id="L24">		}</span>
+
+<span class="fc" id="L26">		ID_LIST.add(id);</span>
+
+<span class="fc" id="L28">		return id;</span>
+
+	}
+
+	private String journalCode;
+	private Integer annee;
+	
+<span class="fc" id="L35">	public SequenceId() {</span>
+<span class="fc" id="L36">	}</span>
+	
+	public SequenceId(String code, Integer annee) {
+<span class="fc" id="L39">		super();</span>
+<span class="fc" id="L40">		this.journalCode = code;</span>
+<span class="fc" id="L41">		this.annee = annee;</span>
+<span class="fc" id="L42">	}</span>
+	
+	public String getJournalCode() {
+<span class="fc" id="L45">		return journalCode;</span>
+	}
+	public void setJournalCode(String code) {
+<span class="nc" id="L48">		this.journalCode = code;</span>
+<span class="nc" id="L49">	}</span>
+	public Integer getAnnee() {
+<span class="fc" id="L51">		return annee;</span>
+	}
+	public void setAnnee(Integer annee) {
+<span class="nc" id="L54">		this.annee = annee;</span>
+<span class="nc" id="L55">	}</span>
+
+	@Override
+	public boolean equals(Object obj)
+	{
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">		if (obj instanceof SequenceId sequenceId) {</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">			return sequenceId.getJournalCode().equals(this.getJournalCode())</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">				&amp;&amp; sequenceId.getAnnee().equals(this.getAnnee());</span>
+		}
+
+<span class="nc" id="L65">		return  false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

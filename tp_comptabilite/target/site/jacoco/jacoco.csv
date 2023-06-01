@@ -1,0 +1,16 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+comptabilite,com.intech.comptabilite,ComptabiliteApplication,5,3,0,0,2,1,1,1,1,1
+comptabilite,com.intech.comptabilite.service.exceptions,FunctionalException,4,9,0,0,2,4,1,2,1,2
+comptabilite,com.intech.comptabilite.service.exceptions,NotFoundException,13,3,0,0,6,2,3,1,3,1
+comptabilite,com.intech.comptabilite.service.businessmanager,ComptabiliteManagerImpl,90,232,13,19,25,58,17,11,7,5
+comptabilite,com.intech.comptabilite.model,JournalComptable,8,18,0,0,4,8,2,4,2,4
+comptabilite,com.intech.comptabilite.model,LigneEcritureComptable,29,24,0,0,13,10,8,4,8,4
+comptabilite,com.intech.comptabilite.model,SequenceId,10,74,1,9,5,19,3,11,2,7
+comptabilite,com.intech.comptabilite.model,CompteComptable,8,22,0,0,4,10,2,5,2,5
+comptabilite,com.intech.comptabilite.model,LigneId,23,3,0,0,10,2,5,1,5,1
+comptabilite,com.intech.comptabilite.model,SequenceEcritureComptable,8,28,0,0,4,12,2,6,2,6
+comptabilite,com.intech.comptabilite.model,EcritureComptable,10,93,0,0,4,29,3,11,3,11
+comptabilite,com.intech.comptabilite.service.entityservice,JournalComptableService,0,46,1,5,0,13,1,5,0,3
+comptabilite,com.intech.comptabilite.service.entityservice,SequenceEcritureComptableService,0,46,0,2,0,16,0,4,0,3
+comptabilite,com.intech.comptabilite.service.entityservice,CompteComptableService,0,46,1,5,0,13,1,5,0,3
+comptabilite,com.intech.comptabilite.service.entityservice,EcritureComptableService,17,99,0,12,4,23,3,12,3,6

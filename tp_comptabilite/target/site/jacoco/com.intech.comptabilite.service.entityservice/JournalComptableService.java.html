@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JournalComptableService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">comptabilite</a> &gt; <a href="index.source.html" class="el_package">com.intech.comptabilite.service.entityservice</a> &gt; <span class="el_source">JournalComptableService.java</span></div><h1>JournalComptableService.java</h1><pre class="source lang-java linenums">package com.intech.comptabilite.service.entityservice;
+
+import com.intech.comptabilite.model.JournalComptable;
+import com.intech.comptabilite.repositories.JournalComptableRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@Service
+public class JournalComptableService {
+
+
+	private final JournalComptableRepository repository;
+
+    public JournalComptableService(JournalComptableRepository repository)
+<span class="fc" id="L18">    {</span>
+<span class="fc" id="L19">        this.repository = repository;</span>
+<span class="fc" id="L20">    }</span>
+
+    /**
+     * Renvoie le {@link JournalComptable} de code {@code pCode} s'il est présent dans la liste
+     *
+     * @param pList la liste où chercher le {@link JournalComptable}
+     * @param pCode le code du {@link JournalComptable} à chercher
+     * @return {@link JournalComptable} ou {@code null}
+     */
+    public JournalComptable getByCode(List&lt;? extends JournalComptable&gt; pList, String pCode) {
+<span class="fc" id="L30">        JournalComptable vRetour = null;</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">        for (JournalComptable vBean : pList) {</span>
+<span class="pc bpc" id="L32" title="1 of 4 branches missed.">            if (vBean != null &amp;&amp; Objects.equals(vBean.getCode(), pCode)) {</span>
+<span class="fc" id="L33">                vRetour = vBean;</span>
+<span class="fc" id="L34">                break;</span>
+            }
+<span class="fc" id="L36">        }</span>
+<span class="fc" id="L37">        return vRetour;</span>
+    }
+
+	public List&lt;JournalComptable&gt; getListJournalComptable() {
+<span class="fc" id="L41">		List&lt;JournalComptable&gt; result = new ArrayList&lt;JournalComptable&gt;();</span>
+<span class="fc" id="L42">		repository.findAll().forEach(result::add);</span>
+<span class="fc" id="L43">		return result;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

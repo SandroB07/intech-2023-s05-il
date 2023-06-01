@@ -1,11 +1,11 @@
 package com.intech.comptabilite.service.businessmanager;
 
-import java.util.List;
-
 import com.intech.comptabilite.model.CompteComptable;
 import com.intech.comptabilite.model.EcritureComptable;
 import com.intech.comptabilite.model.JournalComptable;
 import com.intech.comptabilite.service.exceptions.FunctionalException;
+
+import java.util.List;
 
 public interface ComptabiliteManager {
 
@@ -44,7 +44,7 @@ public interface ComptabiliteManager {
      * <p><strong>Attention :</strong> l'écriture n'est pas enregistrée en persistance</p>
      * @param pEcritureComptable L'écriture comptable concernée
      */
-    EcritureComptable addReference(EcritureComptable pEcritureComptable);
+    void addReference(EcritureComptable pEcritureComptable);
 
     /**
      * Vérifie que l'Ecriture comptable respecte les règles de gestion.

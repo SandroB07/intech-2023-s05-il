@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LigneId.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">comptabilite</a> &gt; <a href="index.source.html" class="el_package">com.intech.comptabilite.model</a> &gt; <span class="el_source">LigneId.java</span></div><h1>LigneId.java</h1><pre class="source lang-java linenums">package com.intech.comptabilite.model;
+
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
+
+import java.io.Serializable;
+
+@Embeddable
+public class LigneId implements Serializable {
+	
+	@Transient
+	private static final long serialVersionUID = -1023248724908108139L;
+	
+	private Integer ecritureId;
+	private Integer ligneId;
+	
+<span class="fc" id="L17">	public LigneId() {</span>
+<span class="fc" id="L18">	}</span>
+	
+	public LigneId(Integer ecritureId, Integer ligneId) {
+<span class="nc" id="L21">		super();</span>
+<span class="nc" id="L22">		this.ecritureId = ecritureId;</span>
+<span class="nc" id="L23">		this.ligneId = ligneId;</span>
+<span class="nc" id="L24">	}</span>
+	
+	public Integer getEcritureId() {
+<span class="nc" id="L27">		return ecritureId;</span>
+	}
+	
+	public void setEcritureId(Integer ecritureId) {
+<span class="nc" id="L31">		this.ecritureId = ecritureId;</span>
+<span class="nc" id="L32">	}</span>
+	
+	public Integer getLigneId() {
+<span class="nc" id="L35">		return ligneId;</span>
+	}
+	
+	public void setLigneId(Integer ligneId) {
+<span class="nc" id="L39">		this.ligneId = ligneId;</span>
+<span class="nc" id="L40">	}	</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

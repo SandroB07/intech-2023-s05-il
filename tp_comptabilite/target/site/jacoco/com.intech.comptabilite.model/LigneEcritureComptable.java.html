@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LigneEcritureComptable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">comptabilite</a> &gt; <a href="index.source.html" class="el_package">com.intech.comptabilite.model</a> &gt; <span class="el_source">LigneEcritureComptable.java</span></div><h1>LigneEcritureComptable.java</h1><pre class="source lang-java linenums">package com.intech.comptabilite.model;
+
+import com.intech.comptabilite.model.validation.MontantComptable;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = &quot;ligne_ecriture_comptable&quot;)
+public class LigneEcritureComptable {
+
+
+    private static final String MESSAGE_DECIMAL = &quot;Le montant doit posseder 2 chiffres maximum après la virgule&quot;;
+
+	@EmbeddedId
+	private LigneId ligneId; // Pour gérer une clé composée
+
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+	@JoinColumn(name = &quot;compteComptableNumero&quot;)
+    @NotNull
+    private CompteComptable compteComptable;
+
+    /** The Libelle. */
+    @Size(max = 200)
+    private String libelle;
+
+    /** The Credit. */
+    @MontantComptable
+    private BigDecimal credit;
+    /** The Debit. */
+    @MontantComptable
+    private BigDecimal debit;
+
+
+<span class="fc" id="L37">    public LigneEcritureComptable() {</span>
+<span class="fc" id="L38">    }</span>
+
+    public LigneEcritureComptable(CompteComptable pCompteComptable, String pLibelle,
+<span class="fc" id="L41">                                  BigDecimal pDebit, BigDecimal pCredit) {</span>
+<span class="fc" id="L42">        compteComptable = pCompteComptable;</span>
+<span class="fc" id="L43">        libelle = pLibelle;</span>
+<span class="fc" id="L44">        debit = pDebit;</span>
+<span class="fc" id="L45">        credit = pCredit;</span>
+<span class="fc" id="L46">    }</span>
+
+    public LigneId getLigneId() {
+<span class="nc" id="L49">		return ligneId;</span>
+	}
+    public void setLigneId(LigneId ligneId) {
+<span class="nc" id="L52">		this.ligneId = ligneId;</span>
+<span class="nc" id="L53">	}    </span>
+    public CompteComptable getCompteComptable() {
+<span class="nc" id="L55">        return compteComptable;</span>
+    }
+    public void setCompteComptable(CompteComptable pCompteComptable) {
+<span class="nc" id="L58">        compteComptable = pCompteComptable;</span>
+<span class="nc" id="L59">    }</span>
+    public String getLibelle() {
+<span class="nc" id="L61">        return libelle;</span>
+    }
+    public void setLibelle(String pLibelle) {
+<span class="nc" id="L64">        libelle = pLibelle;</span>
+<span class="nc" id="L65">    }</span>
+    public BigDecimal getDebit() {
+<span class="fc" id="L67">        return debit;</span>
+    }
+    public void setDebit(BigDecimal pDebit) {
+<span class="nc" id="L70">        debit = pDebit;</span>
+<span class="nc" id="L71">    }</span>
+    public BigDecimal getCredit() {
+<span class="fc" id="L73">        return credit;</span>
+    }
+    public void setCredit(BigDecimal pCredit) {
+<span class="nc" id="L76">        credit = pCredit;</span>
+<span class="nc" id="L77">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompteComptable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">comptabilite</a> &gt; <a href="index.source.html" class="el_package">com.intech.comptabilite.model</a> &gt; <span class="el_source">CompteComptable.java</span></div><h1>CompteComptable.java</h1><pre class="source lang-java linenums">package com.intech.comptabilite.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+@Entity
+@Table(name = &quot;compte_comptable&quot;)
+public class CompteComptable {
+	
+	@Id
+    @NotNull
+    private Integer numero;
+
+    @NotNull
+    @Size(min = 1, max = 150)
+    private String libelle;
+
+
+<span class="fc" id="L22">    public CompteComptable() {</span>
+<span class="fc" id="L23">    }</span>
+
+<span class="fc" id="L25">    public CompteComptable(Integer pNumero) {</span>
+<span class="fc" id="L26">        numero = pNumero;</span>
+<span class="fc" id="L27">    }</span>
+
+    public CompteComptable(Integer pNumero, String pLibelle) {
+<span class="fc" id="L30">        this(pNumero);</span>
+<span class="fc" id="L31">        libelle = pLibelle;</span>
+<span class="fc" id="L32">    }</span>
+
+    public Integer getNumero() {
+<span class="fc" id="L35">        return numero;</span>
+    }
+    public void setNumero(Integer pNumero) {
+<span class="nc" id="L38">        numero = pNumero;</span>
+<span class="nc" id="L39">    }</span>
+    public String getLibelle() {
+<span class="fc" id="L41">        return libelle;</span>
+    }
+    public void setLibelle(String pLibelle) {
+<span class="nc" id="L44">        libelle = pLibelle;</span>
+<span class="nc" id="L45">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

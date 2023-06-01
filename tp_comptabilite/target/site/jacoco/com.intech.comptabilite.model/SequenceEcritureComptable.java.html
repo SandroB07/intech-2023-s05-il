@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SequenceEcritureComptable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">comptabilite</a> &gt; <a href="index.source.html" class="el_package">com.intech.comptabilite.model</a> &gt; <span class="el_source">SequenceEcritureComptable.java</span></div><h1>SequenceEcritureComptable.java</h1><pre class="source lang-java linenums">package com.intech.comptabilite.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
+
+@Entity
+@IdClass(SequenceId.class)
+@Table(name = &quot;sequence_ecriture_comptable&quot;)
+public class SequenceEcritureComptable {
+	@Id
+	private String journalCode;
+	@Id
+    private Integer annee;
+    
+    private Integer derniereValeur;
+
+    // ==================== Constructeurs ====================
+    /**
+     * Constructeur
+     */
+<span class="fc" id="L23">    public SequenceEcritureComptable() {</span>
+<span class="fc" id="L24">    }</span>
+
+    public SequenceEcritureComptable(String journalCode, Integer annee, Integer derniereValeur) {
+<span class="fc" id="L27">		super();</span>
+<span class="fc" id="L28">		this.journalCode = journalCode;</span>
+<span class="fc" id="L29">		this.annee = annee;</span>
+<span class="fc" id="L30">		this.derniereValeur = derniereValeur;</span>
+<span class="fc" id="L31">	}</span>
+
+	// ==================== Getters/Setters ====================
+    public String getJournalCode() {
+<span class="fc" id="L35">        return journalCode;</span>
+    }
+    public void setJournalCode(String pJournalCode) {
+<span class="nc" id="L38">        journalCode = pJournalCode;</span>
+<span class="nc" id="L39">    }</span>
+    public Integer getAnnee() {
+<span class="fc" id="L41">        return annee;</span>
+    }
+    public void setAnnee(Integer pAnnee) {
+<span class="nc" id="L44">        annee = pAnnee;</span>
+<span class="nc" id="L45">    }</span>
+    public Integer getDerniereValeur() {
+<span class="fc" id="L47">        return derniereValeur;</span>
+    }
+    public void setDerniereValeur(Integer pDerniereValeur) {
+<span class="fc" id="L50">        derniereValeur = pDerniereValeur;</span>
+<span class="fc" id="L51">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

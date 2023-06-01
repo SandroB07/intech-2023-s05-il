@@ -1,21 +1,24 @@
 package com.intech.comptabilite.service.entityservice;
 
+import com.intech.comptabilite.model.JournalComptable;
+import com.intech.comptabilite.repositories.JournalComptableRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.intech.comptabilite.model.JournalComptable;
-import com.intech.comptabilite.repositories.JournalComptableRepository;
-
 @Service
 public class JournalComptableService {
 
-	@Autowired
-	private JournalComptableRepository repository;
-	
+
+	private final JournalComptableRepository repository;
+
+    public JournalComptableService(JournalComptableRepository repository)
+    {
+        this.repository = repository;
+    }
+
     /**
      * Renvoie le {@link JournalComptable} de code {@code pCode} s'il est présent dans la liste
      *

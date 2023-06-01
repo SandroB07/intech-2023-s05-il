@@ -1,14 +1,11 @@
 package com.intech.comptabilite.model;
 
-import java.math.BigDecimal;
-
-import jakarta.annotation.Nullable;
+import com.intech.comptabilite.model.validation.MontantComptable;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import com.intech.comptabilite.model.validation.MontantComptable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ligne_ecriture_comptable")

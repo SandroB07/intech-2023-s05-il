@@ -1,13 +1,12 @@
 package com.intech.comptabilite.service.entityservice;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.intech.comptabilite.model.SequenceEcritureComptable;
 import com.intech.comptabilite.model.SequenceId;
 import com.intech.comptabilite.repositories.SequenceEcritureComptableRepository;
 import com.intech.comptabilite.service.exceptions.NotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class SequenceEcritureComptableService {
@@ -20,9 +19,9 @@ public class SequenceEcritureComptableService {
 		this.repository = repository;
 	}
 
-	public int getDernierValeurByCodeAndAnnee(String journalCode, Integer annee) throws NotFoundException {
+	public int getDernierValeurSequenceId(SequenceId sequenceId) throws NotFoundException {
 		Optional<SequenceEcritureComptable> seq =
-				repository.findById(new SequenceId(journalCode, annee));
+				repository.findById(sequenceId);
 		if(seq.isEmpty()) {
 			throw new NotFoundException();
 		} else {
@@ -30,16 +29,16 @@ public class SequenceEcritureComptableService {
 		}
 	}
 	
-	public SequenceEcritureComptable upsert(SequenceEcritureComptable sequenceEcritureComptable) {
+	public void upsert(SequenceEcritureComptable sequenceEcritureComptable) {
 
 		SequenceEcritureComptable seq =
-				repository.findById(new SequenceId(
+				repository.findById(SequenceId.createOrGet(
 						sequenceEcritureComptable.getJournalCode(),
 						sequenceEcritureComptable.getAnnee())
 				).orElse(sequenceEcritureComptable);
 
 		seq.setDerniereValeur(sequenceEcritureComptable.getDerniereValeur());
-		return repository.save(seq);
+		repository.save(seq);
 	}
 	
 }

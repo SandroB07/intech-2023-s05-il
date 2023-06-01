@@ -1,9 +1,9 @@
 package com.intech.comptabilite.model;
 
-import java.io.Serializable;
-
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Transient;
+
+import java.io.Serializable;
 
 @Embeddable
 public class LigneId implements Serializable {
